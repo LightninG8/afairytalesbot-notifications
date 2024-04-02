@@ -10,11 +10,11 @@ const cors = require("cors");
 const app = express();
 const port = 3002;
 
-// const client = new ImgurClient({
-//   clientId: process.env.IMGUR_CLIENT_ID,
-//   clientSecret: process.env.IMGUR_CLIENT_SECRET,
-//   refreshToken: process.env.IMGUR_REFRESH_TOKEN,
-// });
+const client = new ImgurClient({
+  clientId: process.env.IMGUR_CLIENT_ID,
+  clientSecret: process.env.IMGUR_CLIENT_SECRET,
+  refreshToken: process.env.IMGUR_REFRESH_TOKEN,
+});
 
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -27,15 +27,16 @@ app.post("/send_bot_notification", async (req, res) => {
 
     await ImageDataURI.outputFile(req.body.imade_data, filePath);
 
-    
-    // const response = await client.upload({
-    //   image: fs.createReadStream(filePath),
-    //   type: "stream",
-    // });
+    const response = await client.upload({
+      image: fs.createReadStream(filePath),
+      type: "stream",
+    });
 
-    // if (!response?.data?.link) {
-    //   return;
-    // }
+    fs.unlink(filePath, () => {});
+
+    if (!response?.data?.link) {
+      return;
+    }
 
     await axios
       .post(
@@ -44,7 +45,7 @@ app.post("/send_bot_notification", async (req, res) => {
           message: req.body.message,
           client_id: req.body.client_id,
           attachment_type: "image",
-          attachment_url: `https://notifications.mamamoonkids.ru/public/${filePath.replace('./public/', '')}`,
+          attachment_url: response.data.link,
         }
       )
       .then(function (response) {
@@ -52,14 +53,10 @@ app.post("/send_bot_notification", async (req, res) => {
       });
 
     res.json({ status: 200 });
-
-    fs.unlink(filePath, () => {});
   } catch (e) {
     console.log(e);
 
     res.json({ status: 400 });
-
-    fs.unlink(filePath, () => {});
   }
 });
 
