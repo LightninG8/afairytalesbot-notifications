@@ -22,7 +22,7 @@ app.use(express.static("public"));
 app.post("/send_bot_notification", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
-    "Access-Con`enter code here`trol-Allow-Methods",
+    "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH"
   );
   res.setHeader(
