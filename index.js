@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ImageDataURI = require("image-data-uri");
 const axios = require("axios");
+const cors = require('cors');
 const fs = require("fs");
 const { ImgurClient } = require("imgur");
 
