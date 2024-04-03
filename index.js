@@ -2,11 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ImageDataURI = require("image-data-uri");
 const axios = require("axios");
-const cors = require('cors');
+const cors = require("cors");
 const fs = require("fs");
 const { ImgurClient } = require("imgur");
-
-const cors = require("cors");
 
 const app = express();
 const port = 3002;
@@ -22,6 +20,16 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.static("public"));
 
 app.post("/send_bot_notification", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Con`enter code here`trol-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
   try {
     const date = new Date().getTime();
     const filePath = `./public/${date}.jpg`;
