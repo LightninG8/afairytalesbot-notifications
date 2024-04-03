@@ -19,7 +19,14 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.static("public"));
 
+app.options('/send_bot_notification', function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.end();
+});
 app.post("/send_bot_notification", async (req, res) => {
+  console.log('hello');
   try {
     const date = new Date().getTime();
     const filePath = `./public/${date}.jpg`;
