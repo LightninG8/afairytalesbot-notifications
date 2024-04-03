@@ -16,9 +16,11 @@ const client = new ImgurClient({
   refreshToken: process.env.IMGUR_REFRESH_TOKEN,
 });
 
-app.use(cors());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(express.static("public"));
+app.configure(() => {
+  app.use(cors());
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(express.static("public"));
+});
 
 app.post("/send_bot_notification", async (req, res) => {
   try {
@@ -37,6 +39,9 @@ app.post("/send_bot_notification", async (req, res) => {
     if (!response?.data?.link) {
       return;
     }
+
+    console.log(response?.data?.link)
+    console.log(req.body.message, req.body.client_id);
 
     await axios
       .post(
